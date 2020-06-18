@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import requests
 from Classe import Classe
 from bs4 import BeautifulSoup

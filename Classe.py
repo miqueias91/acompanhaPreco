@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 sys.path.append(os.path.realpath('.'))
@@ -45,19 +46,15 @@ class Classe:
 					self.buscaPrecoColombo(x)
 				elif x[3] == 'RICARDO ELETRO':
 					self.buscaPrecoRicardoEletro(x)
+				elif x[3] == 'O BOTICARIO':
+					self.buscaPrecoBoticario(x)
 
 	def buscaPrecoMagazineLuiza(self, dados):
 		if dados:
 			response = requests.get(dados[1])
 			if response.status_code == 200:
 				html_soup = BeautifulSoup(response.text, 'html.parser')
-				type(html_soup)
-				produto_containers = html_soup.find_all('div', class_ = 'wrapper__content')
-				produto = produto_containers[0]
-			
-				image_containers = html_soup.find_all('div', class_ = 'showcase-product__container-img')
-				image = image_containers[0]
-			
+				type(html_soup)			
 				preco_containers = html_soup.find_all('span', class_ = 'price-template__text')
 				preco = preco_containers[0]
 				preco = preco.text.replace(".", "")
@@ -71,9 +68,6 @@ class Classe:
 			if response.status_code == 200:
 				html_soup = BeautifulSoup(response.text, 'html.parser')
 				type(html_soup)
-				produto_containers = html_soup.find_all('div', class_ = 'product-header__Wrapper-ye5r6a-2')
-				produto = produto_containers[0]
-
 				preco_containers = html_soup.find_all('span', class_ = 'price__SalesPrice-ej7lo8-2')
 				preco = preco_containers[0]
 				preco = preco.text.replace("R$ ", "")
@@ -88,9 +82,6 @@ class Classe:
 			if response.status_code == 200:
 				html_soup = BeautifulSoup(response.text, 'html.parser')
 				type(html_soup)
-				produto_containers = html_soup.find_all('span', class_ = 'product-info-name')
-				produto = produto_containers[0]
-
 				preco_containers = html_soup.find_all('span', itemprop = 'lowPrice')
 				preco = preco_containers[0]
 				preco = preco.text.replace(".", "")
@@ -104,8 +95,21 @@ class Classe:
 			if response.status_code == 200:
 				html_soup = BeautifulSoup(response.text, 'html.parser')
 				type(html_soup)
-
 				preco_containers = html_soup.find_all('span', class_ = 'dados-preco-valor--label')
+				preco = preco_containers[0]
+				preco = preco.text.replace("R$ ", "")
+				preco = preco.replace(".", "")
+				preco = preco.replace(",", ".")
+
+				self.atualizaPreco(str(preco), str(dados[0]))
+
+	def buscaPrecoBoticario(self, dados):
+		if dados:
+			response = requests.get(dados[1])
+			if response.status_code == 200:
+				html_soup = BeautifulSoup(response.text, 'html.parser')
+				type(html_soup)
+				preco_containers = html_soup.find_all('div', class_ = 'nproduct-price-value')
 				preco = preco_containers[0]
 				preco = preco.text.replace("R$ ", "")
 				preco = preco.replace(".", "")
